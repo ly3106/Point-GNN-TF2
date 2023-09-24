@@ -2,9 +2,12 @@
 
 from functools import partial
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+
+tf.disable_v2_behavior()
 import numpy as np
-import tensorflow.contrib.slim as slim
+# import tensorflow.contrib.slim as slim
+import tf_slim as slim
 
 def instance_normalization(features):
     with tf.variable_scope(None, default_name='IN'):

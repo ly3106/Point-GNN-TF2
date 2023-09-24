@@ -1,6 +1,8 @@
 """This file implements utility functions for tensorflow summary."""
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+
+tf.disable_v2_behavior()
 from tensorboard import summary as summary_lib
 
 def write_summary_scale(key, value, global_step, summary_dir):

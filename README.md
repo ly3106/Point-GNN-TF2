@@ -1,8 +1,10 @@
-# Point-GNN
+# Point-GNN-TF2
 
-This repository contains a reference implementation of our [Point-GNN: Graph Neural Network for 3D Object Detection in a Point Cloud](http://openaccess.thecvf.com/content_CVPR_2020/papers/Shi_Point-GNN_Graph_Neural_Network_for_3D_Object_Detection_in_a_CVPR_2020_paper.pdf), CVPR 2020. 
+This repository is modified from [Point-GNN](https://github.com/WeijingShi/Point-GNN) to enable running in TensorFlow2.x. [Here](https://blog.csdn.net/ly869915532/article/details/133172691) is the update tutorial.
 
-If you find this code useful in your research, please consider citing our work:
+This repository contains a reference implementation of [Point-GNN: Graph Neural Network for 3D Object Detection in a Point Cloud](http://openaccess.thecvf.com/content_CVPR_2020/papers/Shi_Point-GNN_Graph_Neural_Network_for_3D_Object_Detection_in_a_CVPR_2020_paper.pdf), CVPR 2020. 
+
+If you find this code useful in your research, please consider citing the work:
 ```
 @InProceedings{Point-GNN,
 author = {Shi, Weijing and Rajkumar, Ragunathan (Raj)},
@@ -16,19 +18,21 @@ year = {2020}
 ## Getting Started
 
 ### Prerequisites
+If you didn't operate according the above [update tutorial](https://blog.csdn.net/ly869915532/article/details/133172691), and clone this project directly, you should set these prerequisites up, first. It is recommended to use Anaconda when building the environment.
 
-We use Tensorflow 1.15 for this implementation. Please [install CUDA](https://developer.nvidia.com/cuda-10.0-download-archive) if you want GPU support.   
+We migrate this implementation from Tensorflow 1.15 to **Tensorflow 2.0**. Please [install CUDA](https://developer.nvidia.com/cuda-10.0-download-archive) if you want GPU support.
 ```
-pip3 install --user tensorflow-gpu==1.15.0
+pip3 install tensorflow-gpu==2.0
 ```
 
 To install other dependencies: 
 ```
-pip3 install --user opencv-python
-pip3 install --user open3d-python==0.7.0.0
-pip3 install --user scikit-learn
-pip3 install --user tqdm
-pip3 install --user shapely
+pip3 install opencv-python
+pip3 install open3d==0.8.0.0
+pip3 install scikit-learn
+pip3 install tqdm
+pip3 install shapely
+pip3 install --upgrade tf_slim
 ```
 
 ### KITTI Dataset
@@ -38,32 +42,32 @@ We use the KITTI 3D Object Detection dataset. Please download the dataset from t
     DATASET_ROOT_DIR
     ├── image                    #  Left color images
     │   ├── training
-    |   |   └── image_2            
+    │   │   └── image_2            
     │   └── testing
-    |       └── image_2 
+    │       └── image_2 
     ├── velodyne                 # Velodyne point cloud files
     │   ├── training
-    |   |   └── velodyne            
+    │   │   └── velodyne            
     │   └── testing
-    |       └── velodyne 
+    │       └── velodyne 
     ├── calib                    # Calibration files
     │   ├── training
-    |   |   └──calib            
+    │   │   └──calib            
     │   └── testing
-    |       └── calib 
+    │       └── calib 
     ├── labels                   # Training labels
     │   └── training
-    |       └── label_2
+    │       └── label_2
     └── 3DOP_splits              # split files.
         ├── train.txt
         ├── train_car.txt
         └── ...
 
-### Download Point-GNN
+### Download Point-GNN-TF2
 
 Clone the repository recursively:
 ```
-git clone https://github.com/WeijingShi/Point-GNN.git --recursive
+git clone https://github.com/ly3106/Point-GNN-TF2.git --recursive
 ```
 
 ## Inference

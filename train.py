@@ -8,7 +8,8 @@ from sys import getsizeof
 from multiprocessing import Pool, Queue, Process
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 from dataset.kitti_dataset import KittiDataset
 from models.graph_gen import get_graph_generate_fn

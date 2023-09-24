@@ -7,7 +7,8 @@ import multiprocessing
 from functools import partial
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import open3d
 import cv2
 from tqdm import tqdm
@@ -154,19 +155,19 @@ if VISUALIZATION_LEVEL == 1:
     calib = dataset.get_calib(0)
     cam_points_in_img_with_rgb = dataset.get_cam_points_in_image_with_rgb(0,
         calib=calib)
-    vis = open3d.Visualizer()
+    vis = open3d.visualization.Visualizer()
     vis.create_window()
-    pcd = open3d.PointCloud()
-    pcd.points = open3d.Vector3dVector(cam_points_in_img_with_rgb.xyz)
-    pcd.colors = open3d.Vector3dVector(cam_points_in_img_with_rgb.attr[:,1:4])
-    line_set = open3d.LineSet()
-    graph_line_set = open3d.LineSet()
+    pcd = open3d.geometry.PointCloud()
+    pcd.points = open3d.utility.Vector3dVector(cam_points_in_img_with_rgb.xyz)
+    pcd.colors = open3d.utility.Vector3dVector(cam_points_in_img_with_rgb.attr[:,1:4])
+    line_set = open3d.geometry.LineSet()
+    graph_line_set = open3d.geometry.LineSet()
     box_corners = np.array([[0, 0, 0]])
     box_edges = np.array([[0,0]])
-    line_set.points = open3d.Vector3dVector(box_corners)
-    line_set.lines = open3d.Vector2iVector(box_edges)
-    graph_line_set.points = open3d.Vector3dVector(box_corners)
-    graph_line_set.lines = open3d.Vector2iVector(box_edges)
+    line_set.points = open3d.utility.Vector3dVector(box_corners)
+    line_set.lines = open3d.utility.Vector2iVector(box_edges)
+    graph_line_set.points = open3d.utility.Vector3dVector(box_corners)
+    graph_line_set.lines = open3d.utility.Vector2iVector(box_edges)
     vis.add_geometry(pcd)
     vis.add_geometry(line_set)
     vis.add_geometry(graph_line_set)
@@ -203,9 +204,9 @@ with tf.Session(graph=graph,
     for frame_idx in tqdm(range(0, NUM_TEST_SAMPLE)):
         start_time = time.time()
         if VISUALIZATION_LEVEL == 2:
-            pcd = open3d.PointCloud()
-            line_set = open3d.LineSet()
-            graph_line_set = open3d.LineSet()
+            pcd = open3d.geometry.PointCloud()
+            line_set = open3d.geometry.LineSet()
+            graph_line_set = open3d.geometry.LineSet()
         # provide input ======================================================
         cam_rgb_points = dataset.get_cam_points_in_image_with_rgb(frame_idx,
             config['downsample_by_voxel_size'])
@@ -330,10 +331,10 @@ with tf.Session(graph=graph,
                     (last_layer_points_xyz.shape[0], 3), dtype=np.float32)
                 last_layer_points_color[:, :] =  color_map[raw_box_labels, :]
                 cam_points_color = cam_rgb_points.attr[:, 1:]
-                pcd.points = open3d.Vector3dVector(np.vstack(
+                pcd.points = open3d.utility.Vector3dVector(np.vstack(
                     [last_layer_points_xyz[box_indices][nms_indices],
                     last_layer_points_xyz, cam_rgb_points.xyz]))
-                pcd.colors = open3d.Vector3dVector(np.vstack(
+                pcd.colors = open3d.utility.Vector3dVector(np.vstack(
                     [last_layer_points_color[box_indices][nms_indices],
                     np.tile([(1,0.,200./255)],
                         (last_layer_points_color.shape[0], 1)),
@@ -355,8 +356,8 @@ with tf.Session(graph=graph,
                 last_layer_edges += last_layer_points_xyz.shape[0]
                 lines = last_layer_edges
                 graph_line_set.points = pcd.points
-                graph_line_set.lines = open3d.Vector2iVector(lines)
-                graph_line_set.colors = open3d.Vector3dVector(colors)
+                graph_line_set.lines = open3d.utility.Vector2iVector(lines)
+                graph_line_set.colors = open3d.utility.Vector3dVector(colors)
             # convert to KITTI ================================================
             detection_boxes_3d_corners = nms.boxes_3d_to_corners(
                 detection_boxes_3d)
@@ -462,16 +463,16 @@ with tf.Session(graph=graph,
                 box_corners = np.array([[0, 0, 0]])
                 box_edges = np.array([[0, 0]])
                 box_colors =  np.array([[0, 0, 0]])
-                pcd.points = open3d.Vector3dVector(np.vstack([
+                pcd.points = open3d.utility.Vector3dVector(np.vstack([
                     last_layer_points_xyz, cam_rgb_points.xyz]))
-                pcd.colors = open3d.Vector3dVector(np.vstack([np.tile(
+                pcd.colors = open3d.utility.Vector3dVector(np.vstack([np.tile(
                     [(128./255,0.,128./255)],
                     (last_layer_points_color.shape[0], 1)), cam_points_color]))
-                graph_line_set.points = open3d.Vector3dVector(
+                graph_line_set.points = open3d.utility.Vector3dVector(
                     np.array([[0, 0, 0]]))
-                graph_line_set.lines = open3d.Vector2iVector(
+                graph_line_set.lines = open3d.utility.Vector2iVector(
                     [[0, 0]])
-                graph_line_set.colors = open3d.Vector3dVector(
+                graph_line_set.colors = open3d.utility.Vector3dVector(
                     np.array([[0, 0, 0]]))
                 if not IS_TEST:
                     gt_boxes = []
@@ -504,18 +505,18 @@ with tf.Session(graph=graph,
             cv2.waitKey(10)
             if not IS_TEST:
                 box_edges += gt_box_corners.shape[0]
-                line_set.points = open3d.Vector3dVector(np.vstack(
+                line_set.points = open3d.utility.Vector3dVector(np.vstack(
                     [gt_box_corners, box_corners]))
-                line_set.lines = open3d.Vector2iVector(np.vstack(
+                line_set.lines = open3d.utility.Vector2iVector(np.vstack(
                     [gt_box_edges, box_edges]))
-                line_set.colors = open3d.Vector3dVector(np.vstack(
+                line_set.colors = open3d.utility.Vector3dVector(np.vstack(
                     [gt_box_colors, box_colors]))
             else:
-                line_set.points = open3d.Vector3dVector(np.vstack(
+                line_set.points = open3d.utility.Vector3dVector(np.vstack(
                     [box_corners]))
-                line_set.lines = open3d.Vector2iVector(np.vstack(
+                line_set.lines = open3d.utility.Vector2iVector(np.vstack(
                     [box_edges]))
-                line_set.colors = open3d.Vector3dVector(np.vstack(
+                line_set.colors = open3d.utility.Vector3dVector(np.vstack(
                     [box_colors]))
         if VISUALIZATION_LEVEL == 1:
             vis.update_geometry()
@@ -524,7 +525,7 @@ with tf.Session(graph=graph,
         if VISUALIZATION_LEVEL == 2:
             print("Configure the viewpoint as you want and press [q]")
             def custom_draw_geometry_load_option(geometry_list):
-                vis = open3d.Visualizer()
+                vis = open3d.visualization.Visualizer()
                 vis.create_window()
                 for geometry in geometry_list:
                     vis.add_geometry(geometry)

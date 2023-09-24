@@ -1,6 +1,8 @@
 """Implements popular losses. """
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+
+tf.disable_v2_behavior()
 
 def focal_loss_sigmoid(labels, logits, alpha=0.5, gamma=2):
     """
