@@ -519,7 +519,9 @@ with tf.Session(graph=graph,
                 line_set.colors = open3d.utility.Vector3dVector(np.vstack(
                     [box_colors]))
         if VISUALIZATION_LEVEL == 1:
-            vis.update_geometry()
+            vis.update_geometry(geometry=pcd)
+            vis.update_geometry(geometry=line_set)
+            vis.update_geometry(geometry=graph_line_set)
             vis.poll_events()
             vis.update_renderer()
         if VISUALIZATION_LEVEL == 2:
