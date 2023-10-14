@@ -20,15 +20,15 @@ year = {2020}
 ### Prerequisites
 If you didn't operate according the above [update tutorial](https://blog.csdn.net/ly869915532/article/details/133172691), and clone this project directly, you should set these prerequisites up, first. It is recommended to use Anaconda when building the environment.
 
-We migrate this implementation from Tensorflow 1.15 to **Tensorflow 2.0**. Please [install CUDA](https://developer.nvidia.com/cuda-10.0-download-archive) if you want GPU support.
+We migrate this implementation from Tensorflow 2.0 to **Tensorflow 2.11**. Please [install CUDA](https://developer.nvidia.com/cuda-10.0-download-archive) if you want GPU support.
 ```
-pip3 install tensorflow-gpu==2.0
+pip3 install tensorflow==2.11
 ```
 
 To install other dependencies: 
 ```
-pip3 install opencv-python
-pip3 install open3d==0.8.0.0
+pip3 install opencv-python==4.7.0.68
+pip3 install open3d==0.16.0
 pip3 install scikit-learn
 pip3 install tqdm
 pip3 install shapely
